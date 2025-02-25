@@ -7,17 +7,15 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configure CORS
 const corsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'http://localhost',
-    'http://localhost:8000',
-    // Add your production domain when deploying
-    // 'https://yourdomain.com'
-  ],
-  credentials: true
-};
+    origin: [
+      'http://localhost:3000',
+      'http://localhost',
+      'http://localhost:8000',
+      'https://bi-dashboard-demo.vercel.app', // Add your frontend domain here
+    ],
+    credentials: true
+  };
 
 app.use(cors(corsOptions));
 app.use(express.json());
