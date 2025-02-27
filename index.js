@@ -66,8 +66,8 @@ function generateHotelData(rng) {
     const today_departures = randomInt(0, 20, rng);
 
     // occupancy_and_adr
-    const occupancy_rate = randomFloat(50, 90, rng);
-    const adr = randomFloat(50, 200, rng);
+    const occupancy_rate = randomInt(50, 90, rng);
+    const adr = randomInt(50, 200, rng);
 
     // guest_birthdays
     const today = new Date();
