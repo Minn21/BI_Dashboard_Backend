@@ -35,7 +35,7 @@ let lastGeneratedHour = null;
 function getHotelData() {
     const now = new Date();
     // Convert current time to hours since epoch (in milliseconds, 3600000 ms = 1 hour)
-    const currentHour = Math.floor(now.getTime() / 36000);
+    const currentHour = Math.floor(now.getTime() / 3600000);
 
     // Regenerate data only if the hour has changed
     if (currentHour !== lastGeneratedHour) {
@@ -112,8 +112,8 @@ function generateHotelData(rng) {
     }
 
     // total_income
-    const total_income_month = randomFloat(10000, 50000, rng);
-    const total_income_year = randomFloat(parseFloat(total_income_month), parseFloat(total_income_month) * 12, rng);
+    const total_income_month = randomInt(10000, 50000, rng);
+    const total_income_year = randomInt(parseFloat(total_income_month), parseFloat(total_income_month) * 12, rng);
 
     return {
         booking_arrivals: {
