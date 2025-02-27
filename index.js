@@ -35,7 +35,7 @@ let lastGeneratedHour = null;
 function getHotelData() {
     const now = new Date();
     // Convert current time to hours since epoch (in milliseconds, 3600000 ms = 1 hour)
-    const currentHour = Math.floor(now.getTime() / 360);
+    const currentHour = Math.floor(now.getTime() / 36000);
 
     // Regenerate data only if the hour has changed
     if (currentHour !== lastGeneratedHour) {
@@ -55,7 +55,7 @@ function generateHotelData(rng) {
     // booking_arrivals
     const current_year_arrivals = randomInt(500, 2000, rng);
     const current_month_arrivals = randomInt(50, 200, rng);
-    const percentage_current_month = ((current_month_arrivals / current_year_arrivals) * 100).toFixed(2);
+    const percentage_current_month = ((current_month_arrivals / current_year_arrivals) * 100);
 
     // member_vs_general_arrivals
     const member_arrivals = randomInt(0, current_month_arrivals, rng);
@@ -66,8 +66,8 @@ function generateHotelData(rng) {
     const today_departures = randomInt(0, 20, rng);
 
     // occupancy_and_adr
-    const occupancy_rate = randomFloat(50, 90, rng).toFixed(2);
-    const adr = randomFloat(50, 200, rng).toFixed(2);
+    const occupancy_rate = randomFloat(50, 90, rng);
+    const adr = randomFloat(50, 200, rng);
 
     // guest_birthdays
     const today = new Date();
@@ -101,7 +101,7 @@ function generateHotelData(rng) {
 
     // canceled_bookings
     const canceled_bookings_count = randomInt(10, 50, rng);
-    const canceled_percentage = ((canceled_bookings_count / (canceled_bookings_count + current_month_arrivals)) * 100).toFixed(2);
+    const canceled_percentage = ((canceled_bookings_count / (canceled_bookings_count + current_month_arrivals)) * 100);
 
     // most_frequent_units
     const most_frequent_units = [];
@@ -112,8 +112,8 @@ function generateHotelData(rng) {
     }
 
     // total_income
-    const total_income_month = randomFloat(10000, 50000, rng).toFixed(2);
-    const total_income_year = randomFloat(parseFloat(total_income_month), parseFloat(total_income_month) * 12, rng).toFixed(2);
+    const total_income_month = randomFloat(10000, 50000, rng);
+    const total_income_year = randomFloat(parseFloat(total_income_month), parseFloat(total_income_month) * 12, rng);
 
     return {
         booking_arrivals: {
