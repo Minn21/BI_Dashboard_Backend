@@ -5,14 +5,10 @@ function randomInt(min, max, rng) {
     return Math.floor(rng() * (max - min + 1)) + min;
 }
 
-function randomFloat(min, max, rng) {
-    return rng() * (max - min) + min;
-}
-
 function generateHotelData(rng) {
     // booking_arrivals
-    const current_year_arrivals = randomInt(500, 1000, rng);
-    const current_month_arrivals = randomInt(50, 150, rng);
+    const current_year_arrivals = randomInt(500, 800, rng);
+    const current_month_arrivals = randomInt(50, 120, rng);
     const percentage_current_month = (current_month_arrivals / current_year_arrivals) * 100;
 
     // member_vs_general_arrivals
@@ -20,11 +16,11 @@ function generateHotelData(rng) {
     const general_arrivals = current_month_arrivals - member_arrivals;
 
     // today_arrivals_departures
-    const today_arrivals = randomInt(0, 20, rng);
+    const today_arrivals = randomInt(0, 17, rng);
     const today_departures = randomInt(0, 20, rng);
 
     // occupancy_and_adr
-    const occupancy_rate = randomInt(50, 90, rng);
+    const occupancy_rate = randomInt(50, 85, rng);
     const adr = randomInt(50, 200, rng);
 
     // guest_birthdays
@@ -32,7 +28,7 @@ function generateHotelData(rng) {
     const todayMonth = today.getMonth() + 1; // 1-12
     const todayDay = today.getDate();
     const guest_birthdays = [];
-    const numGuests = randomInt(5, 10, rng);
+    const numGuests = randomInt(5, 8, rng);
     for (let i = 0; i < numGuests; i++) {
         const name = names[randomInt(0, names.length - 1, rng)];
         const isToday = rng() < 0.2; // 20% chance of birthday being today
@@ -58,14 +54,14 @@ function generateHotelData(rng) {
     };
 
     // canceled_bookings
-    const canceled_bookings_count = randomInt(10, 50, rng);
+    const canceled_bookings_count = randomInt(10, 30, rng);
     const canceled_percentage = (canceled_bookings_count / (canceled_bookings_count + current_month_arrivals)) * 100;
 
     // most_frequent_units
     const most_frequent_units = [];
     for (let i = 1; i <= 5; i++) {
         const unit_id = `U00${i}`;
-        const booking_count = randomInt(10, 150, rng);
+        const booking_count = randomInt(10, 130, rng);
         most_frequent_units.push({ unit_id, booking_count });
     }
 
