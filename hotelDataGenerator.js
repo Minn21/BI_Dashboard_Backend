@@ -5,7 +5,7 @@ function randomInt(min, max, rng) {
     return Math.floor(rng() * (max - min + 1)) + min;
 }
 
-function generateHotelData(rng) {
+function generateMonthlyData(targetMonth, targetYear, rng) {
     // booking_arrivals
     const current_year_arrivals = randomInt(500, 800, rng);
     const current_month_arrivals = randomInt(50, 120, rng);
@@ -15,7 +15,7 @@ function generateHotelData(rng) {
     const member_arrivals = randomInt(0, current_month_arrivals, rng);
     const general_arrivals = current_month_arrivals - member_arrivals;
 
-    // today_arrivals_departures
+    // today_arrivals_departures (for historical months, represents month's total)
     const today_arrivals = randomInt(0, 17, rng);
     const today_departures = randomInt(0, 20, rng);
 
@@ -24,24 +24,20 @@ function generateHotelData(rng) {
     const adr = randomInt(50, 200, rng);
 
     // guest_birthdays
-    const today = new Date();
-    const todayMonth = today.getMonth() + 1; // 1-12
-    const todayDay = today.getDate();
     const guest_birthdays = [];
     const numGuests = randomInt(5, 8, rng);
     for (let i = 0; i < numGuests; i++) {
         const name = names[randomInt(0, names.length - 1, rng)];
-        const isToday = rng() < 0.2; // 20% chance of birthday being today
+        const isInMonth = rng() < 0.2; // 20% chance of birthday in target month
         let month, day;
-        if (isToday) {
-            month = todayMonth;
-            day = todayDay;
+        if (isInMonth) {
+            month = targetMonth;
+            day = randomInt(1, 28, rng);
         } else {
             month = randomInt(1, 12, rng);
-            day = randomInt(1, 28, rng); // Up to 28 to avoid month-end issues
+            day = randomInt(1, 28, rng);
         }
-        const year = 2000; // Fixed year, only month/day matter for filtering
-        const birthday = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const birthday = `2000-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         guest_birthdays.push({ name, birthday });
     }
 
@@ -67,9 +63,11 @@ function generateHotelData(rng) {
 
     // total_income
     const total_income_month = randomInt(10000, 50000, rng);
-    const total_income_year = randomInt(total_income_month, total_income_month * 12, rng); // Fixed: removed unnecessary parseFloat
+    const total_income_year = randomInt(total_income_month, total_income_month * 12, rng);
 
     return {
+        month: targetMonth,
+        year: targetYear,
         booking_arrivals: {
             current_month_arrivals,
             current_year_arrivals,
@@ -98,6 +96,32 @@ function generateHotelData(rng) {
             total_income_month,
             total_income_year
         }
+    };
+}
+
+function generateHotelData(rng) {
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1;
+    const currentYear = now.getFullYear();
+
+    // Generate current month data with provided RNG
+    const currentMonthData = generateMonthlyData(currentMonth, currentYear, rng);
+
+    // Generate last 6 months data
+    const historicalData = [];
+    for (let i = 1; i <= 6; i++) {
+        const date = new Date(now);
+        date.setMonth(date.getMonth() - i);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const seed = `${year}-${month}`;
+        const historicalRng = seedrandom(seed);
+        historicalData.push(generateMonthlyData(month, year, historicalRng));
+    }
+
+    return {
+        current: currentMonthData,
+        historical: historicalData
     };
 }
 

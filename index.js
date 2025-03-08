@@ -28,7 +28,7 @@ const server = http.createServer(app);
 const io = socketIo(server, { cors: corsOptions });
 
 // Utility functions from hotelDataGenerator.js (included here for completeness)
-const names = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy','Kyar Zan'];
+const names = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Kyar Zan'];
 
 function randomInt(min, max, rng) {
   return Math.floor(rng() * (max - min + 1)) + min;
@@ -190,136 +190,149 @@ app.post('/login', (req, res) => {
   }
 });
 
+// Current Month Data Endpoints
 app.get('/booking-arrivals', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.booking_arrivals));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/member-vs-general', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.member_vs_general_arrivals));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/today-status', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.today_arrivals_departures));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/occupancy-and-adr', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.occupancy_and_adr));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/guest-birthdays', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.guest_birthdays));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/guest-birthdays/today', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      const today = new Date();
-      const todayMonth = today.getMonth() + 1;
-      const todayDay = today.getDate();
-  
-      const todayBirthdays = data.guest_birthdays.filter(guest => {
-        const birthday = new Date(guest.birthday);
-        return birthday.getMonth() + 1 === todayMonth && birthday.getDate() === todayDay;
-      });
-  
-      res.json(createResponse(true, todayBirthdays));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/age-groups', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.age_group_segmentation));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/canceled-bookings', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.canceled_bookings));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/frequent-units', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.most_frequent_units));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/total-income', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      res.json(createResponse(true, data.total_income));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/stats/summary', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      const summary = {
-        total_current_guests: Object.values(data.age_group_segmentation).reduce((sum, val) => sum + val, 0),
-        occupancy_rate: data.occupancy_and_adr.occupancy_rate,
-        monthly_income: data.total_income.total_income_month,
-        today_movement: data.today_arrivals_departures,
-      };
-      res.json(createResponse(true, summary));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
-  
-  app.get('/units/most-booked', verifyToken, (req, res) => {
-    try {
-      const data = getHotelData();
-      const mostBooked = data.most_frequent_units.reduce(
-        (max, unit) => unit.booking_count > max.booking_count ? unit : max,
-        { booking_count: 0 }
-      );
-  
-      res.json(createResponse(true, {
-        unit_id: mostBooked.unit_id,
-        booking_count: mostBooked.booking_count
-      }));
-    } catch (error) {
-      res.status(500).json(createResponse(false, null, error.message));
-    }
-  });
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.booking_arrivals));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/member-vs-general', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.member_vs_general_arrivals));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/today-status', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.today_arrivals_departures));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/occupancy-and-adr', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.occupancy_and_adr));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/guest-birthdays', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.guest_birthdays));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/guest-birthdays/today', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    const today = new Date();
+    const todayMonth = today.getMonth() + 1;
+    const todayDay = today.getDate();
+
+    const todayBirthdays = data.current.guest_birthdays.filter(guest => {
+      const birthday = new Date(guest.birthday);
+      return birthday.getMonth() + 1 === todayMonth && birthday.getDate() === todayDay;
+    });
+
+    res.json(createResponse(true, todayBirthdays));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/age-groups', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.age_group_segmentation));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/canceled-bookings', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.canceled_bookings));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/frequent-units', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.most_frequent_units));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+app.get('/total-income', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.current.total_income));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+// Historical Data Endpoint
+app.get('/historical-data', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    res.json(createResponse(true, data.historical));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+// Summary Endpoint
+app.get('/stats/summary', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    const summary = {
+      total_current_guests: Object.values(data.current.age_group_segmentation).reduce((sum, val) => sum + val, 0),
+      occupancy_rate: data.current.occupancy_and_adr.occupancy_rate,
+      monthly_income: data.current.total_income.total_income_month,
+      today_movement: data.current.today_arrivals_departures,
+    };
+    res.json(createResponse(true, summary));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
+
+// Most Booked Unit Endpoint
+app.get('/units/most-booked', verifyToken, (req, res) => {
+  try {
+    const data = getHotelData();
+    const mostBooked = data.current.most_frequent_units.reduce(
+      (max, unit) => unit.booking_count > max.booking_count ? unit : max,
+      { booking_count: 0 }
+    );
+
+    res.json(createResponse(true, {
+      unit_id: mostBooked.unit_id,
+      booking_count: mostBooked.booking_count
+    }));
+  } catch (error) {
+    res.status(500).json(createResponse(false, null, error.message));
+  }
+});
 
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
