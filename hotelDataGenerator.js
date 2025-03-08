@@ -1,4 +1,5 @@
 // hotelDataGenerator.js
+const seedrandom = require('seedrandom'); 
 const names = ['Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy'];
 
 function randomInt(min, max, rng) {
