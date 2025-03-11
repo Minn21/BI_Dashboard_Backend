@@ -151,7 +151,7 @@ let lastGeneratedHour = null;
 
 function getHotelData() {
   const now = new Date();
-  const currentHour = Math.floor(now.getTime() / 36000);
+  const currentHour = Math.floor(now.getTime() / 3600000);
   if (currentHour !== lastGeneratedHour) {
     const seed = currentHour.toString();
     const rng = seedrandom(seed);
