@@ -8,13 +8,14 @@
     "dev": "nodemon index.js"
   },
   "dependencies": {
-    "axios": "^1.8.3",
+    "express": "^4.18.2",
     "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
     "seedrandom": "^3.0.5",
-    "socket.io": "^4.8.1",
-    "vary": "^1.1.2"
+    "jsonwebtoken": "^9.0.2",
+    "vary": "^1.1.2",
+    "cookie": "0.5.0",
+    "safe-buffer": "5.2.1",
+    "statuses": "2.0.1"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
