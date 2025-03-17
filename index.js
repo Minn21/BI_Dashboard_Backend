@@ -196,11 +196,5 @@ app.get('/units/most-booked', verifyToken, async (req, res) => {
   }, req, res);
 });
 
-// Vercel deployment handler
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
-}
 
 module.exports = app;
