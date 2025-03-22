@@ -11,7 +11,7 @@ const SECRET_KEY = 'your-secret-key'; // Replace with a strong, unique secret ke
 const corsOptions = {
   origin: [
     'http://localhost:3000',
-    'http://localhost',
+    'http://localhost:3001',
     'http://localhost:8000',
     'https://bi-dashboard-demo.vercel.app',
   ],
